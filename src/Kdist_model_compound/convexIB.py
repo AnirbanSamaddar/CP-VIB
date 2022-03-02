@@ -106,11 +106,7 @@ class ConvexIB(torch.nn.Module):
         - mean_t (Tensor) : deterministic transformation of the input
         '''
 
-        if self.method == 'nonlinear_IB':
-            HT = KDE_entropy_t(self.network.logvar_t,self.logvar_kde,mean_t) # in natts
-            HT_given_X = KDE_entropy_t_given_x(self.network.logvar_t,self.K) # in natts
-            self.IXT = (HT - HT_given_X) / np.log(2) # in bits  
-        elif self.method == 'variational_IB':
+        if self.method == 'variational_IB':
             tmp = -0.5*(1+2*torch.log(sigma_t)-mean_t.pow(2)-sigma_t**2).cumsum(1)
             tmp = tmp*pi
             pi1 = pi.clone()
